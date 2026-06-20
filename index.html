@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Realtime Collaborative Docs</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="logo">DOCS</div>
+
+        <div class="doc-info">
+            <input class="doc-title" value="Untitled Document">
+            <small id="save-status">Saved</small>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <button class="share-btn" onclick="shareDocument()">Share</button>
+
+        <div class="notification" onclick="toggleNotificationPanel()">
+            🔔
+            <span class="badge" id="notif-count">0</span>
+        </div>
+
+        <div id="notification-panel" class="notification-panel">
+            <h4>Notifications</h4>
+            <div id="notification-list"></div>
+        </div>
+
+        <div class="avatar" id="avatar" onclick="showProfile()"></div>
+    </div>
+</header>
+
+<div class="toolbar">
+    <button onclick="document.execCommand('undo')">↶</button>
+    <button onclick="document.execCommand('redo')">↷</button>
+
+    <div class="separator"></div>
+
+    <button onclick="formatDoc('bold')"><b>B</b></button>
+    <button onclick="formatDoc('italic')"><i>I</i></button>
+    <button onclick="formatDoc('underline')"><u>U</u></button>
+
+    <div class="separator"></div>
+
+    <button onclick="document.execCommand('justifyLeft')">⬅</button>
+    <button onclick="document.execCommand('justifyCenter')">⬌</button>
+    <button onclick="document.execCommand('justifyRight')">➡</button>
+</div>
+
+<div class="workspace">
+
+    <section class="document-area">
+        <div id="editor" contenteditable="true"></div>
+    </section>
+
+    <aside class="sidebar">
+        <h3>Collaborators</h3>
+        <div id="users-box"></div>
+
+        <h3>Chat</h3>
+        <div id="chat-box"></div>
+        <div id="typing-indicator"></div>
+
+        <input type="text" id="chat-input" placeholder="Type message...">
+        <button class="send-btn" onclick="sendChat()">Send</button>
+    </aside>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
