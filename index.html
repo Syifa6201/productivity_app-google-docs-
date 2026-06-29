@@ -1,77 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Realtime Collaborative Docs</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Collaborative Docs</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="topbar">
-    <div class="brand">
-        <div class="logo">DOCS</div>
+    <!-- HEADER -->
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">DOCS</div>
 
-        <div class="doc-info">
-            <input class="doc-title" value="Untitled Document">
-            <small id="save-status">Saved</small>
+            <div class="doc-info">
+                <input class="doc-title" id="doc-title" value="Untitled Document">
+                <small id="save-status">Saved</small>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <button class="share-btn" onclick="shareDocument()">Share</button>
+
+            <div class="notification" onclick="toggleNotificationPanel()">
+                🔔
+                <span class="badge" id="notif-count">0</span>
+            </div>
+
+            <div id="notification-panel" class="notification-panel">
+                <h4>Notifications</h4>
+                <div id="notification-list"></div>
+            </div>
+
+            <div class="avatar" id="avatar" onclick="showProfile()"></div>
+        </div>
+    </header>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+
+        <button onclick="showVersions()">🕒</button>
+        
+        <button onclick="document.execCommand('undo')">↶</button>
+        <button onclick="document.execCommand('redo')">↷</button>
+
+        <div class="separator"></div>
+
+        <button onclick="formatDoc('bold')"><b>B</b></button>
+        <button onclick="formatDoc('italic')"><i>I</i></button>
+        <button onclick="formatDoc('underline')"><u>U</u></button>
+
+        <div class="separator"></div>
+
+        <button onclick="document.execCommand('justifyLeft')">⬅</button>
+        <button onclick="document.execCommand('justifyCenter')">⬌</button>
+        <button onclick="document.execCommand('justifyRight')">➡</button>
+
+        <select id="font-size" onchange="changeFontSize()">
+            <option value="1">8px</option>
+            <option value="3" selected>16px</option>
+            <option value="5">24px</option>
+            <option value="7">36px</option>
+        </select>
+
+        <input type="color" id="font-color" onchange="changeTextColor()">
+
+        <input type="color" id="highlight-color" onchange="changeHighlight()">
+
+        <button onclick="formatDoc('insertUnorderedList')">• List</button>
+
+        <button onclick="formatDoc('insertOrderedList')">1. List</button>
+
+        <button onclick="insertImage()">🖼</button>
+
+        <button onclick="openCommentModal()">💬</button>
+    </div>
+
+    <!-- MAIN -->
+    <div class="workspace">
+
+        <!-- FILES -->
+        <aside class="file-panel">
+            <h3>Documents</h3>
+            <button onclick="createNewDoc()">+ New Document</button>
+            <div id="file-list"></div>
+        </aside>
+
+        <!-- EDITOR -->
+        <section class="document-area">
+            <div id="editor" contenteditable="true"></div>
+        </section>
+
+        <!-- CHAT -->
+        <aside class="sidebar">
+            <h3>Collaborators</h3>
+            <div id="users-box"></div>
+
+            <h3>Chat</h3>
+            <div id="chat-box"></div>
+
+            <div id="typing-indicator"></div>
+
+            <input type="text" id="chat-input" placeholder="Type message...">
+            <button class="send-btn" onclick="sendChat()">Send</button>
+        </aside>
+    </div>
+
+    <h3>Comments</h3>
+<div id="comment-box"></div>
+
+    <div id="login-modal" class="login-modal">
+        <div class="login-box">
+            <h2>Login</h2>
+
+            <input type="text" id="login-username" placeholder="Username">
+            <input type="password" id="login-password" placeholder="Password">
+
+            <button onclick="login()">Login</button>
+            <button onclick="showRegister()">Register</button>
         </div>
     </div>
 
-    <div class="header-right">
-        <button class="share-btn" onclick="shareDocument()">Share</button>
+    <div id="register-modal" class="login-modal" style="display:none;">
+        <div class="login-box">
+            <h2>Register</h2>
 
-        <div class="notification" onclick="toggleNotificationPanel()">
-            🔔
-            <span class="badge" id="notif-count">0</span>
+            <input type="text" id="register-username" placeholder="Username">
+            <input type="password" id="register-password" placeholder="Password">
+
+            <button onclick="register()">Register</button>
+            <button onclick="backToLogin()">Back to Login</button>
         </div>
-
-        <div id="notification-panel" class="notification-panel">
-            <h4>Notifications</h4>
-            <div id="notification-list"></div>
-        </div>
-
-        <div class="avatar" id="avatar" onclick="showProfile()"></div>
     </div>
-</header>
 
-<div class="toolbar">
-    <button onclick="document.execCommand('undo')">↶</button>
-    <button onclick="document.execCommand('redo')">↷</button>
+    <!-- RENAME MODAL -->
+<div id="rename-modal" class="custom-modal" style="display:none;">
+    <div class="modal-box">
+        <h2>Rename Document</h2>
+        <p>Nama baru dokumen:</p>
 
-    <div class="separator"></div>
+        <input type="text" id="rename-input" placeholder="Masukkan nama dokumen">
 
-    <button onclick="formatDoc('bold')"><b>B</b></button>
-    <button onclick="formatDoc('italic')"><i>I</i></button>
-    <button onclick="formatDoc('underline')"><u>U</u></button>
-
-    <div class="separator"></div>
-
-    <button onclick="document.execCommand('justifyLeft')">⬅</button>
-    <button onclick="document.execCommand('justifyCenter')">⬌</button>
-    <button onclick="document.execCommand('justifyRight')">➡</button>
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeRenameModal()">Batal</button>
+            <button class="save-btn" onclick="saveRename()">Simpan</button>
+        </div>
+    </div>
 </div>
 
-<div class="workspace">
+<!-- DELETE MODAL -->
+<div id="delete-modal" class="custom-modal" style="display:none;">
+    <div class="modal-box">
+        <h2>Hapus Document</h2>
+        <p>Yakin ingin menghapus dokumen ini?</p>
 
-    <section class="document-area">
-        <div id="editor" contenteditable="true"></div>
-    </section>
-
-    <aside class="sidebar">
-        <h3>Collaborators</h3>
-        <div id="users-box"></div>
-
-        <h3>Chat</h3>
-        <div id="chat-box"></div>
-        <div id="typing-indicator"></div>
-
-        <input type="text" id="chat-input" placeholder="Type message...">
-        <button class="send-btn" onclick="sendChat()">Send</button>
-    </aside>
-
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeDeleteModal()">Batal</button>
+            <button class="delete-btn" onclick="confirmDelete()">Hapus</button>
+        </div>
+    </div>
 </div>
 
-<script src="app.js"></script>
+<div id="share-modal" class="custom-modal" style="display:none;">
+    <div class="modal-box">
+        <h2>Share Document</h2>
+        <p>Salin link di bawah:</p>
+
+        <input id="share-link" readonly>
+
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeShareModal()">Tutup</button>
+            <button class="save-btn" onclick="copyShareLink()">Copy</button>
+        </div>
+    </div>
+</div>
+
+<div id="profile-modal" class="custom-modal" style="display:none;">
+    <div class="modal-box">
+        <h2>Profile</h2>
+
+        <label>Username</label>
+        <input id="profile-username" readonly>
+
+        <label>Full Name</label>
+        <input id="profile-fullname">
+
+        <label>Bio</label>
+        <input id="profile-bio">
+
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeProfileModal()">Tutup</button>
+            <button class="save-btn" onclick="saveProfile()">Simpan</button>
+        </div>
+    </div>
+</div>
+
+<div id="comment-modal" class="custom-modal" style="display:none;">
+    <div class="modal-box">
+        <h2>Add Comment</h2>
+
+        <textarea id="comment-text"></textarea>
+
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeCommentModal()">Cancel</button>
+            <button class="save-btn" onclick="saveComment()">Save</button>
+        </div>
+    </div>
+</div>
+
+<div id="image-modal" class="custom-modal" style="display:none;">
+    <div class="modal-box">
+        <h2>Insert Image</h2>
+        <p>Masukkan URL gambar:</p>
+
+        <input type="text" id="image-url">
+
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeImageModal()">Batal</button>
+            <button class="save-btn" onclick="insertImageNow()">Insert</button>
+        </div>
+    </div>
+</div>
+    <script src="app.js"></script>
 </body>
 </html>

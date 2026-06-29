@@ -31,7 +31,7 @@ body{
     width:50px;
     height:50px;
     border-radius:12px;
-    background:#1a73e8;
+    background:#d574a8;
     color:white;
     display:flex;
     justify-content:center;
@@ -64,7 +64,7 @@ body{
 }
 
 .share-btn{
-    background:#1a73e8;
+    background:#ff7ea5;
     color:white;
     border:none;
     padding:12px 25px;
@@ -96,7 +96,7 @@ body{
     width:42px;
     height:42px;
     border-radius:50%;
-    background:#1a73e8;
+    background:#ff7ea5;
     color:white;
     display:flex;
     justify-content:center;
@@ -150,7 +150,7 @@ body{
 #editor{
     width:900px;
     height:100%;
-    background:white;
+    background:rgb(244, 215, 234);
     padding:70px;
     border-radius:12px;
     box-shadow:0 0 18px rgba(0,0,0,0.1);
@@ -209,7 +209,7 @@ body{
 
 .send-btn{
     height:45px;
-    background:#1a73e8;
+    background:#ff7ea5;
     color:white;
     border:none;
     border-radius:12px;
@@ -250,17 +250,115 @@ body{
     margin-bottom: 8px;
 }
 
+.file-panel{
+    width:260px;
+    height:100%;
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 0 12px rgba(0,0,0,0.08);
+    overflow-y:auto;
+    flex-shrink:0;
+}
+
+.file-panel button{
+    width:100%;
+    height:45px;
+    background:#e892b0;
+    color:white;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:15px;
+}
+
+.file-panel button:hover{
+    background:#d574a8;
+}
+
+.file-item{
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:12px;
+    background:#f5f5f5;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.file-item:hover{
+    background:#e8f0fe;
+}
+
+.login-modal{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+
+    background: linear-gradient(135deg, #ffdbe8, #ffeef5);
+    overflow: hidden;
+}
+
+.login-box{
+    width: 470px;
+    background: white;
+    padding: 45px;
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: relative;
+    z-index: 2;
+}
+
+    .login-box h2{
+        text-align:center;
+        margin-bottom:10px;
+    }
+
+.login-box input{
+    height:55px;
+    padding:15px 20px;
+    border:1px solid #ffd0df;
+    border-radius:16px;
+    font-size:16px;
+    outline:none;
+}
+
+ .login-box button{
+    height:55px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(90deg,#ff8fb1,#ff6f9d);
+    color:white;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+
 @media (max-width: 768px){
 
     body{
-        overflow:auto;
+        font-family: Arial, sans-serif;
+        background: var(--bg);
+        height: 100vh;
+        overflow: hidden;
     }
 
     .topbar{
-        padding: 10px;
-        height:auto;
-        flex-wrap:wrap;
-        gap:10px;
+        height:70px;
+        background:#fffafd;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:0 25px;
+        border-bottom:1px solid var(--border);
     }
 
     .doc-title{
@@ -313,4 +411,292 @@ body{
         height:40px;
         font-size:14px;
     }
+
+    .file-panel{
+    width:250px;
+    background:white;
+    padding:20px;
+    border-right:1px solid #ddd;
+    overflow:auto;
+    }
+
+    .file-item{
+        padding:12px;
+        margin-bottom:8px;
+        border-radius:10px;
+        cursor:pointer;
+        background:#f5f5f5;
+    }
+
+    .file-item:hover{
+        background:#e8f0fe;
+    }
+
+    .header-file-manager{
+        margin-top:10px;
+        width:320px;
+        max-height:180px;
+        overflow:auto;
+        background:#f8f9fb;
+        padding:12px;
+        border-radius:12px;
+    }
+
+    .header-file-manager button{
+        width:100%;
+        border:none;
+        padding:10px;
+        background:#f595bc;
+        color:white;
+        border-radius:10px;
+        cursor:pointer;
+        margin-bottom:12px;
+    }
+
+    .header-file-item{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        background:white;
+        padding:10px;
+        margin-bottom:8px;
+        border-radius:10px;
+    }
+
+    .file-actions{
+        display:flex;
+        gap:8px;
+    }
+
+    .file-actions button{
+        border:none;
+        background:#eee;
+        padding:5px 8px;
+        border-radius:6px;
+        cursor:pointer;
+    }
+
+    .file-panel h3{
+        margin-bottom:15px;
+        font-size:22px;
+    }
+
+    #file-list{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    }
+
+}
+
+.custom-modal{
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 182, 193, 0.25);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.modal-box{
+    width: 500px;
+    background: linear-gradient(135deg, #fff8fb, #ffeef5);
+    border-radius: 28px;
+    padding: 35px;
+    box-shadow: 0 15px 40px rgba(255, 105, 180, 0.18);
+    border: 2px solid #ffd6e5;
+}
+
+.modal-box h2{
+    margin-bottom: 15px;
+    color: #f378a1;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-box p{
+    margin-bottom: 15px;
+    font-size: 17px;
+    color: #555;
+}
+
+.modal-box input{
+    width: 100%;
+    height: 55px;
+    padding: 15px;
+    border: 2px solid #ffd0df;
+    border-radius: 16px;
+    font-size: 16px;
+    outline: none;
+    background: white;
+}
+
+.modal-box input:focus{
+    border-color: #ff8fb1;
+    box-shadow: 0 0 0 4px rgba(255,143,177,0.2);
+}
+
+.modal-actions{
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.cancel-btn,
+.save-btn,
+.delete-btn{
+    border: none;
+    padding: 14px 28px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.cancel-btn{
+    background: #f3f4f6;
+    color: #444;
+}
+
+.cancel-btn:hover{
+    background: #e5e7eb;
+}
+
+.save-btn{
+    background: linear-gradient(90deg,#ff8fb1,#ff6f9d);
+    color: white;
+}
+
+.save-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(255,111,157,0.3);
+}
+
+.delete-btn{
+    background: linear-gradient(90deg,#ff7ea5,#ff4d88);
+    color: white;
+}
+
+.delete-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(255,77,136,0.3);
+}
+
+#share-link{
+    width:100%;
+    height:52px;
+    border:1px solid #ffd6e5;
+    border-radius:14px;
+    padding:14px;
+    font-size:15px;
+    background:#fff7fa;
+}
+
+.modal-box label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:8px;
+    font-weight:bold;
+    color:#c24b7a;
+}
+
+#profile-modal input{
+    width:100%;
+    height:48px;
+    padding:12px;
+    border:1px solid #ffd6e5;
+    border-radius:12px;
+    margin-bottom:8px;
+    background:#fff7fa;
+}
+
+#comment-box{
+    height:150px;
+    border:1px solid #ffd6e5;
+    border-radius:12px;
+    padding:12px;
+    overflow:auto;
+    background:#fff7fa;
+}
+
+.comment-item{
+    background:#ffe5ef;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:8px;
+}
+
+textarea{
+    width:100%;
+    height:120px;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #ffd6e5;
+}
+
+.notif-item{
+    padding:12px;
+    border-bottom:1px solid #f3d6df;
+    font-size:14px;
+    color:#5c374c;
+}
+
+.notif-item small{
+    color:#c08497;
+    font-size:12px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial;
+    background:#f8dce7;
+    padding:30px;
+}
+
+.back-btn{
+    background:#8f5c72;
+    color:white;
+    border:none;
+    padding:14px 28px;
+    border-radius:14px;
+    cursor:pointer;
+    margin-bottom:25px;
+}
+
+h1{
+    margin-bottom:25px;
+}
+
+.version-card{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    margin-bottom:25px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.version-content{
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px solid #ddd;
+    min-height:80px;
+}
+
+.restore-btn{
+    margin-top:20px;
+    background:#ff7aa8;
+    color:white;
+    border:none;
+    padding:12px 24px;
+    border-radius:12px;
+    cursor:pointer;
 }

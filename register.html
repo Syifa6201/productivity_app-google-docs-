@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Register</h2>
+
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="register()">Register</button>
+
+<script>
+const socket = new WebSocket("ws://localhost:3000");
+
+socket.onopen = () => console.log("CONNECTED");
+socket.onerror = (e) => console.log("ERROR", e);
+
+function register(){
+    console.log("BUTTON CLICKED");
+
+    socket.send(JSON.stringify({
+        type:"register",
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value
+    }));
+}
+</script>
+</body>
+</html>

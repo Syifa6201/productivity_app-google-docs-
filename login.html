@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Login</h2>
+
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+<script>
+const socket = new WebSocket("ws://localhost:3000");
+
+function login(){
+    socket.send(JSON.stringify({
+        type:"login",
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value
+    }));
+}
+
+socket.onmessage=(event)=>{
+    const data=JSON.parse(event.data);
+
+    if(data.type==="login_result"){
+        if(data.success){
+            window.location="index.html";
+        }else{
+            alert("Login gagal");
+        }
+    }
+}
+</script>
+</body>
+</html>
