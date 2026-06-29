@@ -150,7 +150,7 @@ body{
 #editor{
     width:900px;
     height:100%;
-    background:rgb(244, 215, 234);
+    background:rgb(255, 255, 255);
     padding:70px;
     border-radius:12px;
     box-shadow:0 0 18px rgba(0,0,0,0.1);
@@ -699,4 +699,19 @@ h1{
     padding:12px 24px;
     border-radius:12px;
     cursor:pointer;
+}
+
+#newdoc-modal .modal-box{
+    width:520px;
+    background:linear-gradient(180deg,#fff7fb,#ffe4ef);
+    border:2px solid #f9a8d4;
+}
+
+#newdoc-modal input{
+    border:2px solid #f9a8d4;
+    background:white;
+}
+
+#newdoc-modal h2{
+    color:#be185d;
 }

@@ -1,0 +1,55 @@
+body{
+    margin:0;
+    padding:30px;
+    font-family:Arial, sans-serif;
+    background:#f5f7fb;
+}
+
+.back-btn{
+    padding:10px 18px;
+    border:none;
+    background:#e584b9;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+h1{
+    margin-top:25px;
+    font-size:42px;
+}
+
+#history-list{
+    margin-top:30px;
+}
+
+.version-card{
+    background:white;
+    padding:20px;
+    margin-bottom:15px;
+    border-radius:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+.version-time{
+    color:gray;
+    font-size:14px;
+}
+
+.version-content{
+    margin-top:15px;
+    background:#f1f5f9;
+    padding:15px;
+    border-radius:10px;
+    white-space:pre-wrap;
+}
+
+.restore-btn{
+    margin-top:15px;
+    padding:10px 16px;
+    border:none;
+    background:#fe9dcd;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}

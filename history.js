@@ -3,6 +3,8 @@ const socket = new WebSocket(`ws://${window.location.hostname}:3000`);
 const params = new URLSearchParams(window.location.search);
 const docId = params.get("id");
 
+const historyList = document.getElementById("history-list");
+
 socket.onopen = () => {
     socket.send(JSON.stringify({
         type: "get_versions",
@@ -18,42 +20,45 @@ socket.onmessage = (event) => {
     }
 
     if(data.type === "rollback_success"){
-        alert("Version restored");
+        alert("Version restored!");
         location.reload();
     }
 };
 
 function renderVersions(versions){
-    const container = document.getElementById("history-list");
-    container.innerHTML = "";
+    historyList.innerHTML = "";
 
-    if(versions.length === 0){
-        container.innerHTML = "<h3>Belum ada version</h3>";
+    if(!versions.length){
+        historyList.innerHTML = "<h2>Belum ada version</h2>";
         return;
     }
 
-    versions.forEach(v => {
-        container.innerHTML += `
-            <div class="version-card">
-                <p><b>User:</b> ${v.username || "Unknown"}</p>
-                <p><b>Waktu:</b> ${v.created_at}</p>
+    versions.forEach((version,index)=>{
+        const div = document.createElement("div");
+        div.className = "version-card";
 
-                <div class="version-content">
-                    ${v.content}
-                </div>
-
-                <button class="restore-btn"
-                    onclick="restoreVersion(${v.id})">
-                    Restore
-                </button>
-            </div>
+        div.innerHTML = `
+            <h3>Version ${versions.length-index}</h3>
+            <div class="version-time">${version.created_at}</div>
+            <div class="version-content">${escapeHtml(version.content)}</div>
+            <button class="restore-btn" onclick="restoreVersion(${version.id})">
+                Restore
+            </button>
         `;
+
+        historyList.appendChild(div);
     });
 }
 
 function restoreVersion(versionId){
     socket.send(JSON.stringify({
         type:"rollback",
-        versionId
+        versionId: versionId
     }));
+}
+
+function escapeHtml(text){
+    const div = document.createElement("div");
+    div.innerText = text;
+    return div.innerHTML;
 }

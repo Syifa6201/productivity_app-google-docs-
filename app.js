@@ -189,11 +189,12 @@ function renderDocuments(documents) {
 
     documents.forEach(doc => {
         fileList.innerHTML += `
-        <div class="file-item">
-            <span onclick="openDocument(${doc.id})">📄 ${doc.title}</span>
+        <div class="file-item" onclick="openDocument(${doc.id}, '${doc.title.replace(/'/g, "\\'")}')">
+            <span>📄 ${doc.title}</span>
+
             <div style="margin-top:8px;">
-                <button onclick="renameDocument(${doc.id})">✏</button>
-                <button onclick="deleteDocument(${doc.id})">🗑</button>
+                <button onclick="event.stopPropagation(); renameDocument(${doc.id})">✏</button>
+                <button onclick="event.stopPropagation(); deleteDocument(${doc.id})">🗑</button>
             </div>
         </div>
         `;
@@ -240,17 +241,41 @@ function backToLogin(){
     document.getElementById("login-modal").style.display = "flex";
 }
 
-function createNewDoc() {
-    const title = prompt("Nama dokumen:");
-    if (!title) return;
+function createNewDoc(){
+    document.getElementById("newdoc-modal").style.display = "flex";
+}
+
+function closeNewDocModal(){
+    document.getElementById("newdoc-modal").style.display = "none";
+}
+
+function saveNewDoc(){
+    const title = document.getElementById("newdoc-input").value.trim();
+
+    if(title === ""){
+        alert("Nama dokumen tidak boleh kosong");
+        return;
+    }
+
+    if(socket.readyState !== WebSocket.OPEN){
+        alert("Server belum connect");
+        return;
+    }
 
     socket.send(JSON.stringify({
         type: "new_document",
-        title
+        title: title
     }));
+
+    document.getElementById("newdoc-input").value = "";
+    closeNewDocModal();
 }
 
-function openDocument(id) {
+function openDocument(id, title) {
+    currentDocId = id;
+
+    document.getElementById("doc-title").value = title;
+
     socket.send(JSON.stringify({
         type: "open_document",
         id

@@ -162,17 +162,27 @@ wss.on('connection', (ws, req) => {
 
         // CREATE DOCUMENT
         if (data.type === "new_document") {
+            console.log("CREATE DOC:", data.title);
+
             db.query(
-                "INSERT INTO documents(title,content) VALUES(?,?)",
+                "INSERT INTO documents(title, content) VALUES(?, ?)",
                 [data.title, ""],
                 (err) => {
-                    if (err) return console.log(err);
+                    if (err) {
+                        console.log("INSERT ERROR:", err);
+                        return;
+                    }
 
-                    saveNotification(`Document created: ${data.title}`);
+                    console.log("DOCUMENT SAVED");
 
                     db.query(
-                        "SELECT id,title FROM documents ORDER BY id DESC",
+                        "SELECT id, title FROM documents ORDER BY id DESC",
                         (err, results) => {
+                            if (err) {
+                                console.log(err);
+                                return;
+                            }
+
                             broadcast({
                                 type: "documents",
                                 documents: results
@@ -184,42 +194,39 @@ wss.on('connection', (ws, req) => {
         }
 
         // EDIT DOCUMENT
-        if (data.type === "edit") {
-            console.log("EDIT RECEIVED:", data);
+        // EDIT DOCUMENT
+if (data.type === "edit") {
+    console.log("EDIT RECEIVED:", data);
 
-            db.query(
-                "INSERT INTO versions(document_id,content,username) VALUES(?,?,?)",
-                [data.id, data.content, data.username],
-                (err, result) => {
-                    if (err) {
-                        console.log("VERSION INSERT ERROR:", err);
-                    } else {
-                        console.log("VERSION SAVED:", result.insertId);
-                    }
-                }
-            );
-
-            db.query(
-                "UPDATE documents SET content=? WHERE id=?",
-                [data.content, data.id],
-                (err) => {
-                    if (err) console.log(err);
-                }
-            );
-
-            wss.clients.forEach(client => {
-                if (
-                    client !== ws &&
-                    client.readyState === WebSocket.OPEN
-                ) {
-                    client.send(JSON.stringify({
-                        type: "document",
-                        id: data.id,
-                        content: data.content
-                    }));
-                }
-            });
+    db.query(
+        "UPDATE documents SET content=? WHERE id=?",
+        [data.content, data.id],
+        (err) => {
+            if (err) {
+                console.log("DOCUMENT UPDATE ERROR:", err);
+                return;
+            }
         }
+    );
+
+    db.query(
+        "INSERT INTO versions(document_id, content, created_at) VALUES(?,?,NOW())",
+        [data.id, data.content],
+        (err, result) => {
+            if (err) {
+                console.log("VERSION INSERT ERROR:", err);
+            } else {
+                console.log("VERSION SAVED:", result.insertId);
+            }
+        }
+    );
+
+    broadcast({
+        type: "document",
+        id: data.id,
+        content: data.content
+    });
+}
 
         // TYPING
         if (data.type === "typing") {
@@ -327,13 +334,22 @@ wss.on('connection', (ws, req) => {
         }
 
         if(data.type==="get_versions"){
+            console.log("GET VERSION FOR DOC:", data.id);
+
             db.query(
                 "SELECT * FROM versions WHERE document_id=? ORDER BY id DESC",
                 [data.id],
                 (err,result)=>{
+                    if(err){
+                        console.log("GET VERSION ERROR:", err);
+                        return;
+                    }
+
+                    console.log("VERSIONS FOUND:", result.length);
+
                     ws.send(JSON.stringify({
                         type:"versions",
-                        versions:result
+                        versions: result || []
                     }));
                 }
             );

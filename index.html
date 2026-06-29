@@ -40,7 +40,7 @@
     <div class="toolbar">
 
         <button onclick="showVersions()">🕒</button>
-        
+
         <button onclick="document.execCommand('undo')">↶</button>
         <button onclick="document.execCommand('redo')">↷</button>
 
@@ -218,6 +218,20 @@
         <div class="modal-actions">
             <button class="cancel-btn" onclick="closeImageModal()">Batal</button>
             <button class="save-btn" onclick="insertImageNow()">Insert</button>
+        </div>
+    </div>
+</div>
+
+<div id="newdoc-modal" class="custom-modal" style="display:none;">
+    <div class="modal-box">
+        <h2>📄 New Document</h2>
+        <p>Masukkan nama dokumen:</p>
+
+        <input type="text" id="newdoc-input" placeholder="Contoh: Rancangan Proposal">
+
+        <div class="modal-actions">
+            <button class="cancel-btn" onclick="closeNewDocModal()">Batal</button>
+            <button class="save-btn" onclick="saveNewDoc()">Simpan</button>
         </div>
     </div>
 </div>
